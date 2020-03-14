@@ -30,6 +30,13 @@ func main() {
 		fmt.Println("unknown current version")
 		os.Exit(1)
 	}
+	
+	commitByCurrVer := getCommitByTag(curVer)
+	commitCurr := getCurrentCommit()
+	
+	if commitByCurrVer == commitCurr {
+		return
+	}
 
 	newVer := bumpVersion(curVer, levels[*level])
 	args := []string{"tag", "-a", "-m", newVer}
@@ -68,6 +75,24 @@ func getGitConfigBool(args ...string) bool {
 
 func closestVersion() string {
 	cmd := exec.Command("git", "describe", "--abbrev=0", "--tags")
+	bs, err := cmd.Output()
+	if err != nil {
+		return ""
+	}
+	return string(bytes.TrimSpace(bs))
+}
+
+func getCommitByTag(tag string) string {
+	cmd := exec.Command("git", "rev-list", "-n", "1", tag)
+	bs, err := cmd.Output()
+	if err != nil {
+		return ""
+	}
+	return string(bytes.TrimSpace(bs))
+}
+
+func getCurrentCommit() string {
+	cmd := exec.Command("git", "log", "-n", "1", "--pretty=format:\"%H\"")
 	bs, err := cmd.Output()
 	if err != nil {
 		return ""
