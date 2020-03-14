@@ -35,6 +35,7 @@ func main() {
 	commitCurr := getCurrentCommit()
 	
 	if commitByCurrVer == commitCurr {
+		exit0()
 		return
 	}
 
@@ -52,6 +53,14 @@ func main() {
 
 func git(args ...string) {
 	cmd := exec.Command("git", args...)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Stdin = os.Stdin
+	cmd.Run()
+}
+
+func exit0() {
+	cmd := exec.Command("exit", "0")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	cmd.Stdin = os.Stdin
