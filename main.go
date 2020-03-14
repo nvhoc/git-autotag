@@ -92,7 +92,7 @@ func getCommitByTag(tag string) string {
 }
 
 func getCurrentCommit() string {
-	cmd := exec.Command("git", "log", "-n", "1", "--pretty=format:\"%H\"")
+	cmd := exec.Command("git", "rev-parse", "HEAD")
 	bs, err := cmd.Output()
 	if err != nil {
 		return ""
