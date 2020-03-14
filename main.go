@@ -67,7 +67,7 @@ func getGitConfigBool(args ...string) bool {
 }
 
 func closestVersion() string {
-	cmd := exec.Command("git", "describe", "--abbrev=0")
+	cmd := exec.Command("git", "describe", "--abbrev=0", "--tags")
 	bs, err := cmd.Output()
 	if err != nil {
 		return ""
